@@ -1,28 +1,18 @@
-import { useEffect, useState } from "react";
-import { getMovieDetails, searchMovies, getMovieCredits, getMovieReviews } from "./services/tmdb";
-import SearchForm from "./components/SearchForm";
-import MovieCard from "./components/MovieCard";
-
+import { Routes, Route } from 'react-router-dom'
+import HomePage from './pages/HomePage'
+import MovieDetailPage from './pages/MovieDetailPage'
 
 function App() {
-  const[movies, setMovies] = useState([]);
-
-  const handleSearchResults = (results) => {
-    setMovies(results);
-    // console.log(results[0]);
-  };
-
   return (
-    <div>
-      <SearchForm onSearch={handleSearchResults} />
+    <Routes>
+      {/* When URL is '/' show the HomePage component */}
+      <Route path="/" element={<HomePage />} />
 
-      <ul>
-        {movies.map((movie) => (
-          <MovieCard movie={movie} />
-        ))}
-      </ul>
-    </div>
-  );
+      {/* When URL is '/movie/27205' for example, show MovieDetailPage */}
+      {/* :id is a URL parameter — it can be any value */}
+      <Route path="/movie/:id" element={<MovieDetailPage />} />
+    </Routes>
+  )
 }
 
 export default App
