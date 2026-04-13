@@ -10,6 +10,13 @@ import { auth } from './services/firebase'
 function App() {
   const [user, setUser] = useState(null);
 
+  /*
+    Movies state lives here instead of HomePage so it
+    survives navigation. When the user goes to a detail
+    page and comes back, the results are still there.
+  */
+  const [movies, setMovies] = useState([]);
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
@@ -19,12 +26,19 @@ function App() {
 
   return (
     <div>
-      {/* NavBar sits outside Routes so it appears on every page */}
       <NavBar user={user} />
-
       <Routes>
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/" element={<HomePage user={user} />} />
+        <Route
+          path="/"
+          element={
+            <HomePage
+              user={user}
+              movies={movies}
+              setMovies={setMovies}
+            />
+          }
+        />
         <Route path="/movie/:id" element={<MovieDetailPage user={user} />} />
       </Routes>
     </div>
