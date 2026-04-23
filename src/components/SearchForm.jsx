@@ -1,42 +1,43 @@
 import { useState } from 'react';
-import { searchMovies } from "../services/tmdb";
 
-function SearchForm(props) {
+function SearchForm({ onSearch }) {
+  // query tracks what the user has typed; error holds the current validation message
   const [query, setQuery] = useState('');
   const [error, setError] = useState('');
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const handleSubmit = (event) => {
+    event.preventDefault(); // stop the page from refreshing on submit
 
-    if(query === "") {
-        return setError('Please type a Movie');
+    // Validate before calling the API
+    if (query.trim() === '') {
+      return setError('Please type a Movie');
     }
-    if(query.length > 100) {
-        return setError('Search must be less than 100 characters');
+    if (query.length > 100) {
+      return setError('Search must be less than 100 characters');
     }
 
     setError('');
-    const results = await searchMovies(query);
-    props.onSearch(results);
-
+    onSearch(query); // pass the query up to the parent (HomePage) to trigger the search
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      <label>Search Movies</label>
-      <input
-        type="text"
-        value={query}
-        onChange={(e) => {
-            setQuery(e.target.value);
-            setError('');
-        }}
-        placeholder="Search Movies"
-      />
-      {error && <p style={{ color: 'red' }}>{error}</p>} {/* Temp. Could change using css later*/}
-
-      <button type="submit">Search</button>
-
+      <div className="row g-2 align-items-end">
+        <div className="col-12 col-md">
+          <label className="form-label">Search Movies</label>
+          <input
+            className={`form-control ${error ? 'is-invalid' : ''}`}
+            type="text"
+            value={query}
+            onChange={(e) => { setQuery(e.target.value); setError(''); }} // clear error as user types
+            placeholder="Search Movies"
+          />
+          {error && <div className="invalid-feedback">{error}</div>}
+        </div>
+        <div className="col-12 col-md-auto">
+          <button className="btn btn-primary w-100" type="submit">Search</button>
+        </div>
+      </div>
     </form>
   );
 }

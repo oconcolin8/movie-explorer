@@ -2,21 +2,11 @@ import { useNavigate } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
 import { auth } from '../services/firebase';
 
-/*
-  NavBar receives the current user as a prop from App.
-  If user is null nobody is logged in.
-  If user is an object someone is logged in.
-*/
-function NavBar({ user }) {
+function NavBar({ user, onGoHome }) {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
-      /*
-        signOut tells Firebase to end the current session.
-        onAuthStateChanged in App.jsx will automatically fire
-        and set user back to null when this completes.
-      */
       await signOut(auth);
       navigate('/login');
     } catch (err) {
@@ -25,30 +15,25 @@ function NavBar({ user }) {
   };
 
   return (
-    <nav style={{ display: 'flex', justifyContent: 'space-between', padding: '1rem', borderBottom: '1px solid #ccc' }}>
-      
-      {/* App name — clicking always takes you home */}
-      <span
-        onClick={() => navigate('/')}
-        style={{ fontWeight: 'bold', cursor: 'pointer', fontSize: '1.2rem' }}
-      >
+    <nav className="navbar navbar-dark bg-dark px-3 flex-wrap gap-2">
+      {/* Clicking the brand clears search results and goes home */}
+      <span className="navbar-brand mb-0" style={{ cursor: 'pointer' }} onClick={() => { onGoHome(); navigate('/'); }}>
         Movie Explorer
       </span>
 
-      {/* Right side — changes based on whether user is logged in */}
-      <div>
+      <div className="d-flex align-items-center gap-2 flex-wrap">
+        {/* Show different buttons depending on whether the user is logged in */}
         {user ? (
           <>
-            {/* Show the user's email so they know they're logged in */}
-            <span style={{ marginRight: '1rem' }}>{user.email}</span>
-            <button onClick={handleLogout}>Log Out</button>
+            <span className="text-light small">{user.email}</span>
+            <button className="btn btn-outline-light btn-sm" onClick={() => navigate('/watchlist')}>My Watchlist</button>
+            <button className="btn btn-outline-light btn-sm" onClick={() => navigate('/watched')}>My Watched</button>
+            <button className="btn btn-outline-danger btn-sm" onClick={handleLogout}>Log Out</button>
           </>
         ) : (
-          /* Nobody logged in — show login link */
-          <button onClick={() => navigate('/login')}>Log In</button>
+          <button className="btn btn-outline-light btn-sm" onClick={() => navigate('/login')}>Log In</button>
         )}
       </div>
-
     </nav>
   );
 }

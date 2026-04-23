@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="500" height="750" viewBox="0 0 500 750">
+  <rect width="500" height="750" fill="#2c2c2c"/>
+  <rect x="160" y="220" width="180" height="220" rx="12" fill="#444"/>
+  <circle cx="215" cy="295" r="28" fill="#666"/>
+  <polygon points="165,435 335,435 300,330 265,385 235,350" fill="#555"/>
+  <text x="250" y="510" font-family="Arial, sans-serif" font-size="28" fill="#888" text-anchor="middle">No Poster</text>
+</svg>
